@@ -1,0 +1,10 @@
+{
+  "files.encoding": "utf8",
+  "files.autoSave": "afterDelay",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "liveServer.settings.root": "/web",
+  "liveServer.settings.port": 5500,
+  "search.exclude": {"**/node_modules": true,"**/build-work": true,"**/.gradle": true},
+  "files.exclude": {"**/.DS_Store": true}
+}

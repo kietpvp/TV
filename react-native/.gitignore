@@ -1,0 +1,5 @@
+build-work/
+*.apk
+ASIAFB_APP_ID.txt
+backup_readonly_*/
+node_modules/

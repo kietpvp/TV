@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#06251b" />
+  <title>Asia Food & Beverage — TV UI (VS Code Preview)</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <!-- Chỉ có 1 ảnh nền, đã bao gồm logo Asia F&B và slogan. KHÔNG thêm logo lên trên. -->
+  <main id="stage" aria-label="Asia Food & Beverage TV Dashboard">
+    <div class="dev-hint">BẢN THIẾT KẾ HTML · REMOTE GIẢ LẬP: ↑ ↓ ← → / ENTER / ESC</div>
+
+    <header class="top-tools" aria-label="Đồng hồ và tiện ích">
+      <div class="clock-block"><time id="clock" datetime="">08:30</time><div id="date">Thứ Tư, 28 tháng 10, 2026</div></div>
+      <div class="separator"></div>
+      <button class="top-icon tv-focus" type="button" data-action="wifi" title="Wi-Fi" aria-label="Wi-Fi"><img src="assets/icons/wifi.png" alt="" /></button>
+      <button class="top-icon tv-focus" type="button" data-action="settings" title="Cài đặt" aria-label="Cài đặt"><img src="assets/icons/settings.png" alt="" /></button>
+    </header>
+
+    <section class="small-card apps-card" aria-label="Các ứng dụng">
+      <button class="card-title tv-focus" type="button" data-action="apps" aria-label="Mở toàn bộ ứng dụng"><strong>Ứng dụng</strong><span class="arrow">›</span></button>
+      <div class="tile-grid">
+        <button class="icon-tile tv-focus" type="button" data-action="youtube" title="YouTube" aria-label="YouTube"><img src="assets/icons/youtube.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="eshare" title="EShare" aria-label="EShare"><img src="assets/icons/eshare.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="playstore" title="Play Store" aria-label="Play Store"><img src="assets/icons/playstore.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="apps" title="Xem thêm ứng dụng" aria-label="Xem thêm ứng dụng"><img src="assets/icons/plus.png" alt="" /></button>
+      </div>
+
+    </section>
+
+    <section class="small-card connect-card" aria-label="Công nghệ kết nối">
+      <button class="card-title tv-focus" type="button" data-action="connections" aria-label="Mở công nghệ kết nối"><strong>Kết nối</strong><span class="arrow">›</span></button>
+      <div class="tile-grid">
+        <button class="icon-tile tv-focus" type="button" data-action="hdmi" title="HDMI" aria-label="HDMI"><img src="assets/icons/hdmi.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="miracast" title="Miracast" aria-label="Miracast"><img src="assets/icons/miracast.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="cast" title="Google Cast" aria-label="Google Cast"><img src="assets/icons/cast.png" alt="" /></button>
+        <button class="icon-tile tv-focus" type="button" data-action="usb" title="USB" aria-label="USB"><img src="assets/icons/usb.png" alt="" /></button>
+      </div>
+
+    </section>
+
+    <aside class="volume-panel" aria-label="Điều chỉnh âm lượng">
+      <button class="volume-icon tv-focus" type="button" id="mute-btn" data-action="mute" title="Bật/tắt tiếng" aria-label="Bật hoặc tắt tiếng"><img id="mute-icon" src="assets/icons/speaker.png" alt="" /></button>
+      <input class="volume-range" tabindex="-1" type="range" id="volume-slider" min="0" max="100" value="68" step="1" orient="vertical" aria-label="Âm lượng mô phỏng" />
+      <output id="volume-value" for="volume-slider">68%</output>
+      <div class="volume-line"></div>
+      <button class="volume-icon tv-focus" type="button" data-action="audio" title="Thiết bị đầu ra âm thanh" aria-label="Chọn thiết bị âm thanh"><img src="assets/icons/audio-output.svg" alt="" /></button>
+    </aside>
+
+    <footer class="partner-footer" aria-label="Đối tác tiêu biểu">
+
+      <div class="marquee-viewport" aria-hidden="true"><div id="marquee-track" class="marquee-track"></div></div>
+    </footer>
+
+    <section id="dialog" class="dialog" hidden role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+      <div class="dialog-heading"><h2 id="dialog-title">Ứng dụng</h2><button type="button" class="close-button tv-focus" data-action="close" aria-label="Đóng"><span class="close-glyph" aria-hidden="true"></span></button></div>
+      <div id="dialog-content" class="dialog-content"></div>
+    </section>
+    <section id="app-manager" class="dialog app-manager" hidden role="dialog" aria-modal="true" aria-labelledby="manager-title">
+      <div class="dialog-heading"><h2 id="manager-title">Quản lý ứng dụng</h2><button class="manager-back tv-focus" data-action="close-manager">← Quay lại</button></div>
+      <p class="library-hint">Chọn ứng dụng để thêm hoặc xóa ghim</p>
+      <div class="manager-tabs">
+        <button class="tv-focus" data-action="manager-all" aria-pressed="true">Tất cả ứng dụng</button>
+        <button class="tv-focus" data-action="manager-pinned" aria-pressed="false">Đang ghim</button>
+      </div>
+      <input id="app-search" class="tv-focus app-search" placeholder="Tìm kiếm ứng dụng…" aria-label="Tìm kiếm ứng dụng" />
+      <div id="manager-list" class="manager-list"></div>
+    </section>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </main>
+</body>
+</html>

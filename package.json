@@ -1,0 +1,12 @@
+{
+  "name": "asiafb-tv-vscode-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Asia Food & Beverage TV - editable HTML and React Native TV project",
+  "scripts": {
+    "preview": "node tools/serve-web.js",
+    "dev": "node tools/serve-web.js",
+    "check": "node --check web/app.js && node --check tools/serve-web.js && node tools/verify-project.js",
+    "android:build": "powershell -NoProfile -ExecutionPolicy Bypass -File react-native/build-windows.ps1"
+  }
+}

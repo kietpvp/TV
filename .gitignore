@@ -1,0 +1,11 @@
+node_modules/
+**/node_modules/
+react-native/build-work/
+react-native/AsiaFB_TV_ReactNative_Test.apk
+react-native/ASIAFB_APP_ID.txt
+*.log
+*.keystore
+*.jks
+.idea/
+.vscode/*.code-workspace
+.DS_Store
