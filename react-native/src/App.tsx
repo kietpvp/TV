@@ -113,7 +113,7 @@ function Footer({s}: {s: number}) {
     motion.start();
     return () => motion.stop();
   }, [groupWidth, slide]);
-  return <View pointerEvents="none" style={{position: 'absolute', left: 0, right: 0, bottom: 33 * s,
+  return <View pointerEvents="none" style={{position: 'absolute', left: 0, right: 0, bottom: 0,
     height: 78 * s, backgroundColor: 'rgba(0,39,35,0.84)',
     borderTopWidth: s, borderTopColor: 'rgba(158,204,178,0.17)', overflow: 'hidden'}}>
     <Animated.View style={{height: '100%', width: groupWidth * 4,
@@ -122,8 +122,6 @@ function Footer({s}: {s: number}) {
         <View key={`${group}-${index}`} style={{width: slot, height: 54 * s,
           justifyContent: 'center', alignItems: 'center'}}>
           <Image source={logo} resizeMode="contain" style={{width: 101 * s, height: 45 * s}} />
-          <View style={{position: 'absolute', right: 0, top: 10 * s, bottom: 10 * s,
-            width: s, backgroundColor: 'rgba(163,202,180,0.15)'}} />
         </View>))}
     </Animated.View>
   </View>;
@@ -320,13 +318,13 @@ export default function App() {
             const alias = /youtube/i.test(key) ? 'youtube' : /eshare/i.test(key) ? 'eshare'
               : key === 'com.android.vending' ? 'playstore' : key;
             const picture = ICONS[alias] || (app?.iconUri ? {uri: app.iconUri} : undefined);
-            return <FocusButton key={key} label={app?.label || key} image={picture} s={s} enabled={!panel}
+            return <FocusButton key={key} label={app?.label || key} image={picture} s={s} iconSize={53} enabled={!panel}
               buttonRef={homeButtonRefs[4 + index]} focusKey={`app:${key}`} onFocus={setFocusedKey}
               onPress={() => onOpenApp(key)} style={tileStyle(index)}>
               {!picture && <Text style={{fontSize: 24 * s, color: GOLD}}>{(app?.label || key).slice(0, 2)}</Text>}
             </FocusButton>;
           })}
-          <FocusButton label="Xem tất cả ứng dụng" image={ICONS.plus} s={s} enabled={!panel}
+          <FocusButton label="Xem tất cả ứng dụng" image={ICONS.plus} s={s} iconSize={53} enabled={!panel}
             buttonRef={homeButtonRefs[4 + compactApps.length]} focusKey="app:more" onFocus={setFocusedKey}
             onPress={() => setPanel('apps')} style={tileStyle(compactApps.length)} />
         </View>
@@ -341,7 +339,7 @@ export default function App() {
         </FocusButton>
         <View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 14 * s, width: 236 * s}}>
           {CONNECTIONS.map((item, index) => <FocusButton key={item.key} label={item.title} image={ICONS[item.key]}
-            s={s} enabled={!panel} buttonRef={homeButtonRefs[8 + index]}
+            s={s} iconSize={53} enabled={!panel} buttonRef={homeButtonRefs[8 + index]}
             focusKey={`connection:${item.key}`} onFocus={setFocusedKey}
             onPress={() => onConnection(item.key)} style={tileStyle(index)} />)}
         </View>
