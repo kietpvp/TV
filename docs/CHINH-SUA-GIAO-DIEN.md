@@ -6,18 +6,18 @@ Bản web có khung chuẩn `1672 × 941` pixel, tự thu phóng sao cho vừa c
 
 ### A. Đổi hình nền
 
-Thay `web/assets/background.jpg` bằng một hình ngang 16:9 **chỉ có hình nền**. Ảnh hiện tại đã có chữ logo Asia F&B — không viết lại chữ lên HTML. Muốn bỏ chữ khỏi ảnh, phải chuẩn bị ảnh nền khác (không dùng CSS để xoá chi tiết đã dính vào ảnh).
+Thay `web/assets/lake-sunrise.png` bằng một hình ngang 16:9 **chỉ có hình nền**. Ảnh hiện tại đã có chữ logo Asia F&B — không viết lại chữ lên HTML. Muốn bỏ chữ khỏi ảnh, phải chuẩn bị ảnh nền khác (không dùng CSS để xoá chi tiết đã dính vào ảnh).
 
-Để APK dùng ảnh mới, chép ảnh vừa chốt sang `react-native/assets/background.jpg`.
+Để APK dùng ảnh mới, chép ảnh vừa chốt sang `react-native/assets/lake-sunrise.png`. Nền cũ `background.jpg` được giữ để tham khảo.
 
 ### B. Di chuyển Ứng dụng và Kết nối
 
 Trong `web/style.css`:
 
 ```css
-.apps-card { left: 73px; }
-.connect-card { left: 319px; }
-.small-card { top: 551px; width: 226px; height: 247px; }
+.apps-card { left: 84px; }
+.connect-card { left: 379px; }
+.small-card { top: 500px; width: 280px; height: 274px; }
 ```
 
 Chỉnh `left`, `top`, `width`, `height` và nhấn Ctrl+S rồi Refresh/Live Server để xem.
@@ -40,7 +40,7 @@ Sau khi duyệt, chép icon đó sang `react-native/assets/icons/`.
 
 ### E. Logo đối tác chạy không có trang
 
-Sửa mảng `partnerNames` tại đầu `web/app.js`. File ảnh ở `web/assets/partners/`. Thời gian chạy là `26s` trong `@keyframes marquee` / `.marquee-track` ở CSS.
+Sửa mảng `partnerNames` tại đầu `web/app.js`. File ảnh ở `web/assets/partners/`. Một vòng web dài `54s` (hai dãy đối tác trong một nhóm); native là `27s` cho một dãy. Cả hai có cùng tốc độ trượt.
 
 **Vòng lặp nối đuôi thực sự:** `app.js` sinh hai nhóm logo giống nhau; CSS trượt từ vị trí 0 đến `-50%`. Không có nút chuyển trang hay dấu chấm.
 
@@ -52,9 +52,9 @@ Nhấn Tab một lần hoặc dùng mũi tên. Vùng chọn có viền vàng. En
 
 ### G. Hướng nhanh cho React Native
 
-- UI native: `react-native/App.tsx`.
+- UI native: `react-native/src/App.tsx`.
 - `FocusButton` điều khiển viền focus khi dùng remote.
-- Các khung nhỏ là `Compact app / Compact connection card`.
-- Âm lượng native dùng `Pressable` / `AudioManager` (Android module), không phải input HTML.
+- Các khung nhỏ dùng component `HomeCard`, viền vàng sáng theo nhóm nút đang nhận focus.
+- Bản 1.2 không có thanh âm lượng dọc; dùng nút âm lượng của remote hoặc cài đặt hệ thống.
 - Vị trí layout của React Native dùng `* s` (s = tỉ lệ khung) nên tương tự mô hình pixel web.
 - JS web không tự đồng bộ với TSX. Chỉnh web trước rồi áp dụng có chủ đích sang React Native.

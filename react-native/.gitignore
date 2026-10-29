@@ -3,3 +3,13 @@ build-work/
 ASIAFB_APP_ID.txt
 backup_readonly_*/
 node_modules/
+android/.gradle/
+android/.kotlin/
+android/local.properties
+android/build/
+android/app/build/
+android/app/.cxx/
+android/cxx/
+cxx/
+dist/
+!android/app/debug.keystore

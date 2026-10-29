@@ -1,4 +1,4 @@
-package __ASIA_PACKAGE__;
+package com.asiafbtv;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.uimanager.UIManagerHelper;
 import java.util.ArrayList;
@@ -39,6 +41,44 @@ public final class AsiaTVModule extends ReactContextBaseJavaModule {
     @NonNull @Override public String getName() { return "AsiaTV"; }
 
     private AudioManager audio() { return (AudioManager) context.getSystemService(Context.AUDIO_SERVICE); }
+
+    @ReactMethod public void linkHomeFocus(ReadableArray links, Promise p) {
+        context.runOnUiQueueThread(() -> {
+            try {
+                final String[] directions = {"up", "down", "left", "right"};
+                final int[] keys = {KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN,
+                    KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT};
+                for (int i = 0; i < links.size(); i++) {
+                    ReadableMap link = links.getMap(i);
+                    int sourceTag = link.getInt("from");
+                    View source = UIManagerHelper.getUIManagerForReactTag(context, sourceTag).resolveView(sourceTag);
+                    if (source == null) continue;
+                    final View[] targets = new View[4];
+                    for (int direction = 0; direction < directions.length; direction++) {
+                        if (!link.hasKey(directions[direction])) continue;
+                        int tag = link.getInt(directions[direction]);
+                        targets[direction] = UIManagerHelper.getUIManagerForReactTag(context, tag).resolveView(tag);
+                    }
+                    if (targets[0] != null) source.setNextFocusUpId(targets[0].getId());
+                    if (targets[1] != null) source.setNextFocusDownId(targets[1].getId());
+                    if (targets[2] != null) source.setNextFocusLeftId(targets[2].getId());
+                    if (targets[3] != null) source.setNextFocusRightId(targets[3].getId());
+                    // Handle directional keys before spatial search across animated cards.
+                    // OK, Back, Home and volume are left to their normal handlers.
+                    source.setOnKeyListener((view, keyCode, event) -> {
+                        if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
+                        for (int direction = 0; direction < keys.length; direction++) {
+                            if (keyCode != keys[direction]) continue;
+                            View target = targets[direction];
+                            return target != null && target.isShown() && target.isFocusable() && target.requestFocus();
+                        }
+                        return false;
+                    });
+                }
+                p.resolve(true);
+            } catch (Exception e) {p.reject("FOCUS_LINK", e);}
+        });
+    }
 
     @ReactMethod public void linkFocusDown(int headerTag, int firstTileTag, Promise p) {
         context.runOnUiQueueThread(() -> {

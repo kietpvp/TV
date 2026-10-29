@@ -1,9 +1,33 @@
 {
-  "name": "asiafb-tv-react-native-source",
+  "name": "asiafb-tv",
+  "version": "1.2.0",
   "private": true,
-  "version": "1.0.0",
-  "description": "Source overlay for the official react-native-tvos TV template. Run build-windows.cmd (not npm install in this directory).",
-  "scripts": {"build:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File build-windows.ps1"},
-  "tvTemplate": "@react-native-tvos/template-tv@0.83.0-0",
-  "note": "The build script generates the android Gradle project inside build-work/AsiaFBTV. Do not run npm install at this overlay root."
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "typecheck": "tsc --noEmit",
+    "prepare:android": "node scripts/prepare-android.js",
+    "postinstall": "node scripts/prepare-android.js",
+    "build:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File build-windows.ps1"
+  },
+  "dependencies": {
+    "react": "19.2.0",
+    "react-native": "npm:react-native-tvos@0.83.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "20.0.0",
+    "@react-native-community/cli-platform-android": "20.0.0",
+    "@react-native/babel-preset": "0.83.0",
+    "@react-native/metro-config": "0.83.0",
+    "@react-native/typescript-config": "0.83.0",
+    "@types/react": "^19.2.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "ASIA F&B Android TV launcher interface for Xiaomi Google TV"
 }

@@ -1,24 +1,24 @@
 /* ASIA F&B TV - chỉnh bố cục tại đây bằng VS Code. Kích thước chuẩn 1672x941 */
-:root{--gold:#f4cd6b;--white:#fffdf6;--card:rgba(2,42,31,.87);--border:rgba(247,210,113,.87);--tile:rgba(0,24,19,.75)}
+:root{--gold:#ffe77d;--white:#f7faf4;--card:rgba(0,40,34,.76);--border:rgba(151,197,166,.36);--tile:rgba(0,30,27,.86)}
 *{box-sizing:border-box}html,body{padding:0;margin:0;width:100%;height:100%;overflow:hidden;background:#061e15;font-family:Arial,"Segoe UI",sans-serif;color:var(--white)}button,input{font:inherit}button{cursor:pointer}button img{pointer-events:none}button:focus{outline:none}
 #stage{width:1672px;height:940.5px;position:absolute;left:0;top:0;overflow:hidden;transform-origin:top left;
-  background:#113d2b url("assets/background.jpg") no-repeat center center;background-size:100% 100%;}
+  background:#123d36 url("assets/lake-sunrise.png") no-repeat center center;background-size:cover;}
 /* Không có overlay hoặc blur phủ lên hình nền. */
-.dev-hint{position:absolute;top:9px;left:620px;font-size:12px;color:rgba(255,255,255,.65);letter-spacing:.1em;pointer-events:none}
-.top-tools{position:absolute;right:96px;top:70px;display:flex;gap:21px;align-items:center;height:93px;z-index:2}
+.dev-hint{display:none}
+.top-tools{position:absolute;right:60px;top:69px;display:flex;gap:18px;align-items:center;height:96px;z-index:2}
 .clock-block{text-align:right;text-shadow:0 2px 5px rgba(0,0,0,.3);min-width:240px}.clock-block time{display:block;font-size:59px;font-weight:700;line-height:1}.clock-block #date{font-size:20px;margin-top:10px;white-space:nowrap}.separator{height:56px;width:1px;background:rgba(255,224,151,.58);margin:0 0 0 3px}
-.top-icon{border:1px solid rgba(245,215,139,.33);background:rgba(2,49,34,.84);width:57px;height:57px;border-radius:16px;display:flex;align-items:center;justify-content:center}.top-icon img{width:30px;height:30px;object-fit:contain}
-.small-card{position:absolute;width:227px;height:254px;top:552px;border:1.5px solid var(--border);border-radius:28px;background:var(--card);padding:18px;z-index:2;transform:scale(1.1);transform-origin:bottom left}
-.apps-card{left:96px}.connect-card{left:368.7px}
+.top-icon{border:1px solid rgba(220,237,209,.13);background:rgba(16,57,44,.36);width:70px;height:70px;border-radius:17px;display:flex;align-items:center;justify-content:center}.top-icon img{width:35px;height:35px;object-fit:contain}
+.small-card{position:absolute;width:280px;height:274px;top:500px;border:1.1px solid rgba(151,197,166,.36);border-radius:28px;background:rgba(0,40,34,.76);padding:22px;z-index:2;transform:scale(1);transform-origin:center}
+.apps-card{left:84px}.connect-card{left:379px}
 .card-title{position:relative;border:0;background:transparent;color:var(--white);display:flex;align-items:center;justify-content:center;width:100%;height:37px;padding:0 3px 0 2px;border-radius:8px;font-size:24px}.card-title strong{font-weight:750}.arrow{position:absolute;right:3px;color:var(--gold);font-size:32px;line-height:1}
-.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0 0}.icon-tile{height:78px;border:1px solid rgba(228,244,228,.2);background:var(--tile);border-radius:16px;display:grid;place-items:center}.icon-tile img{width:56px;height:56px;object-fit:contain}
+.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:14px 0 0}.icon-tile{height:84px;border:1px solid rgba(190,224,207,.13);background:rgba(0,30,27,.86);border-radius:17px;display:grid;place-items:center}.icon-tile img{width:48px;height:48px;object-fit:contain}
 .icon-tile,.card-title{transition:transform 160ms ease-out,background-color 160ms ease-out;transform-origin:center}
 .icon-tile:focus-visible,.icon-tile.is-focused{transform:scale(1.08)}
 
 .tv-focus:hover,.tv-focus:focus-visible,.tv-focus.is-focused{border-color:var(--gold)!important;outline:3px solid var(--gold);outline-offset:1px;box-shadow:0 0 17px rgba(255,209,96,.68);background-color:rgba(46,105,69,.86)!important;z-index:3}
 .card-title:hover,.card-title:focus-visible,.card-title.is-focused{outline:none!important;box-shadow:none!important;background-color:transparent!important;transform:none}
 .small-card{transition:transform 180ms ease-out,background-color 160ms ease-out,box-shadow 160ms ease-out}
-.small-card:has(.card-title:focus-visible),.small-card:has(.card-title.is-focused){transform:scale(1.155);z-index:4;border-color:var(--gold);outline:2px solid var(--gold);box-shadow:0 0 22px rgba(255,209,96,.6);background:rgba(22,77,49,.95)}
+.small-card:focus-within,.small-card:has(.is-focused){transform:scale(1.012);z-index:4;border-color:#ffe77d;outline:1px solid #ffe77d;box-shadow:0 0 21px 2px rgba(255,230,99,.65);background:rgba(0,46,38,.85)}
 .volume-panel{position:absolute;right:96px;top:329px;height:328px;width:80px;border-radius:46px;border:1.3px solid rgba(252,218,129,.72);background:rgba(0,38,29,.84);display:flex;flex-direction:column;align-items:center;padding:7px;z-index:3}
 .volume-icon{width:58px;height:44px;background:transparent;border:0;color:white;display:grid;place-items:center;border-radius:16px}.volume-icon img{width:31px;height:31px;object-fit:contain}.monitor-symbol{font-size:26px;line-height:1}
 .volume-range{height:196px;width:33px;writing-mode:vertical-lr;direction:rtl;appearance:none;-webkit-appearance:none;cursor:pointer;background:transparent;outline:none;margin:2px 0 0}
@@ -26,8 +26,8 @@
 .volume-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#ffcf62;border:0;box-shadow:0 0 3px rgba(0,0,0,.35);margin-left:-6px}
 .volume-range::-moz-range-track{width:10px;border-radius:8px;background:rgba(255,255,255,.2)}.volume-range::-moz-range-progress{background:var(--gold)}.volume-range::-moz-range-thumb{background:var(--gold);border:0}
 #volume-value{color:var(--gold);font-size:12px;font-weight:bold;margin:4px 0 5px}.volume-line{width:48px;height:1px;background:rgba(255,255,255,.2)}
-.partner-footer{position:absolute;left:0;bottom:0;width:1672px;height:70px;background:rgba(0,21,13,.6);border-top:1px solid rgba(247,208,105,.37);display:flex;align-items:center;z-index:2}
-.marquee-viewport{overflow:hidden;flex:1;height:68px;display:flex;align-items:center}.marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite;will-change:transform}.marquee-group{display:flex;flex:none;align-items:center}.partner{width:142px;height:64px;display:flex;align-items:center;justify-content:center}.partner img{width:104px;height:48px;object-fit:contain}
+.partner-footer{position:absolute;left:0;bottom:33px;width:1672px;height:78px;background:rgba(0,39,35,.84);border-top:1px solid rgba(158,204,178,.17);display:flex;align-items:center;z-index:2}
+.marquee-viewport{overflow:hidden;flex:1;height:76px;display:flex;align-items:center}.marquee-track{display:flex;width:max-content;animation:marquee 54s linear infinite;will-change:transform}.marquee-group{display:flex;flex:none;align-items:center}.partner{position:relative;width:136px;height:54px;display:flex;align-items:center;justify-content:center}.partner::after{content:"";position:absolute;right:0;top:10px;bottom:10px;width:1px;background:rgba(163,202,180,.15)}.partner img{width:101px;height:45px;object-fit:contain}
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .dialog{position:absolute;top:228px;left:96px;width:535px;max-height:610px;background:rgba(0,36,26,.97);border:2px solid var(--gold);border-radius:29px;padding:21px 24px;box-shadow:0 13px 42px rgba(0,0,0,.52);z-index:10;overflow:hidden}
 .dialog[hidden],.toast[hidden]{display:none}.dialog-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.dialog h2{font-size:30px;line-height:1.2;margin:0}.close-button{font-size:27px;color:white;border:1px solid #7d935f;background:rgba(255,255,255,.08);width:51px;height:46px;border-radius:13px}
@@ -62,3 +62,11 @@
 .pinned-apps .dialog-tile,.installed-apps .dialog-tile{font-size:18px}
 .library-section-heading span{font-size:18px}
 .managed-app-name small{font-size:14px}
+
+/* Lake reference: keep system volume on the remote, leave the products clear. */
+.volume-panel,.separator{display:none}
+.clock-block{min-width:240px;margin-right:20px}
+.clock-block time{font-size:64px;line-height:72px}
+.clock-block #date{margin-top:2px}
+.card-title{font-size:28px;height:36px}
+.card-title strong{font-weight:700}

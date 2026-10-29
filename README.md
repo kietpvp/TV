@@ -30,13 +30,13 @@
 | Danh sách Apps trong bảng mở rộng | `web/app.js` | `appEntries` |
 | Bốn công nghệ kết nối | `web/app.js` | `connections` |
 | Cách xử lý nút / Back / remote giả lập | `web/app.js` | `performAction`, `moveFocus` |
-| Hình nền có logo & 3 lon Wana | `web/assets/background.jpg` | thay file nhưng **không** nhúng screenshot có UI |
+| Hình nền có logo & 3 lon Wana | `web/assets/lake-sunrise.png` | thay file nhưng **không** nhúng screenshot có UI |
 | Icon từng app / kết nối | `web/assets/icons/*.png` | giữ tên file |
 | Logo đối tác | `web/assets/partners/*.png` | giữ tên file |
 
 **Lưu ý cực quan trọng về background:** `background.jpg` đã có **logo ASIA FOOD & BEVERAGE + 2 khẩu hiệu**. HTML KHÔNG in thêm chúng; chỉ hiển thị UI động phía trên. Không dùng ảnh chụp đã chứa các nút giao diện làm background, nếu không tất cả sẽ nhân đôi.
 
-Thiết kế Web và React Native dùng **cùng tài sản ảnh và cùng bố cục tham chiếu** nhưng là **hai bộ giao diện riêng** (HTML/CSS và React Native JSX/Styles). Khi bạn chốt thiết kế ở web, cần chuyển những sửa đổi mong muốn sang `react-native/App.tsx`. Chưa có cơ chế tự dịch CSS sang React Native — tránh hiểu nhầm thay CSS sẽ tự đổi APK.
+Thiết kế Web và React Native dùng **cùng tài sản ảnh và cùng bố cục tham chiếu** nhưng là **hai bộ giao diện riêng** (HTML/CSS và React Native JSX/Styles). Khi bạn chốt thiết kế ở web, cần chuyển những sửa đổi mong muốn sang `react-native/src/App.tsx`. Chưa có cơ chế tự dịch CSS sang React Native — tránh hiểu nhầm thay CSS sẽ tự đổi APK.
 
 ## 3. Thư mục dự án
 
@@ -54,11 +54,14 @@ AsiaFB_VSCode_Full_Project/
 │       ├── icons/*.png
 │       └── partners/*.png
 ├── react-native/
-│   ├── App.tsx                         <-- giao diện TV native (React Native)
+│   ├── App.tsx                         <-- điểm vào, xuất màn hình từ src/
+│   ├── src/App.tsx                     <-- giao diện TV native (React Native)
+│   ├── src/components/AppLibrary.tsx   <-- danh sách và quản lý ứng dụng
 │   ├── assets/                         <-- ảnh nguồn riêng cho APK
-│   ├── native/AsiaTVModule.java        <-- gọi AudioManager/app Android
-│   ├── native/AsiaTVPackage.java
-│   ├── scripts/patch-android.js       <-- tích hợp native vào template
+│   ├── android/                        <-- Gradle, manifest và mã Java/Kotlin
+│   ├── scripts/prepare-android.js      <-- tương thích Gradle plugin
+│   ├── index.js / app.json             <-- đăng ký ứng dụng
+│   ├── tsconfig.json / metro.config.js <-- TypeScript và đóng gói JS
 │   ├── build-windows.cmd / .ps1       <-- tạo APK bằng Android SDK
 │   ├── install-tv.ps1 / uninstall-tv.ps1
 │   ├── backup-tv-readonly.ps1
@@ -95,10 +98,10 @@ AsiaFB_VSCode_Full_Project/
 Đọc **`docs/BUILD-APK-VA-ADB.md`** hoặc **`react-native/README-VI.md`** để cài Node 22, Android Studio, SDK, tạo APK và cài qua ADB.
 
 - Windows: chạy `02-BUILD-APK-WINDOWS.cmd` hoặc `react-native/build-windows.cmd`.
-- Script tạo template chính thức `@react-native-tvos/template-tv@0.83.0-0` trong `react-native/build-work/AsiaFBTV`, rồi chép `App.tsx` và module Android vào.
+- Dự án đầy đủ dựa trên `@react-native-tvos/template-tv@0.83.0-0` nằm ngay trong `react-native/`. Chạy `npm ci` tại đó để cài thư viện; sửa giao diện ở `src/`, native ở `android/`.
 - Khi build xong: `react-native/AsiaFB_TV_ReactNative_Test.apk`.
-- Trên Windows, script tạo dự án build ở đường dẫn ngắn `D:\AsiaFB-build\AsiaFBTV` (hoặc ổ đĩa chứa mã nguồn) để tránh giới hạn đường dẫn của Ninja/CMake. Mã nguồn cần sửa vẫn nằm trong `react-native/`; mỗi lần build script chép lại giao diện và assets. Có thể đổi nơi build bằng tham số `-BuildWorkspace` của `react-native/build-windows.ps1`.
-- Chưa có `build-work/android` trong ZIP vì đó là mã Gradle/template sinh tự động trong lần build đầu; để build cần kết nối Internet trên máy Windows.
+- Script build trực tiếp `react-native/android/`, không sinh lại template hoặc chép đè code. Giữ đường dẫn dự án ngắn để tránh giới hạn đường dẫn CMake trên Windows.
+- Cần Internet lần đầu để tải thư viện npm và Gradle dependencies. Hướng dẫn chạy giả lập và build APK nằm tại `react-native/README-VI.md`.
 
 ## 6. Kiểm tra project trong VS Code
 

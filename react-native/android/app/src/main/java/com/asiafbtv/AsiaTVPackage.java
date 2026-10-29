@@ -1,4 +1,4 @@
-package __ASIA_PACKAGE__;
+package com.asiafbtv;
 
 import androidx.annotation.NonNull;
 import com.facebook.react.ReactPackage;

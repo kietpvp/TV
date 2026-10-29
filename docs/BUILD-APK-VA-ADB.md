@@ -18,7 +18,7 @@
 powershell -NoProfile -ExecutionPolicy Bypass -File .\react-native\build-windows.ps1
 ```
 
-Script sẽ tạo **React Native TV template**, tích hợp mã `react-native/App.tsx`, ảnh, module Android Java, rồi gọi Gradle `assembleRelease`.
+Script kiểm tra TypeScript rồi build trực tiếp dự án `react-native/android/` bằng Gradle `assembleRelease`. Giao diện ở `react-native/src/App.tsx`; mã Java/Kotlin nằm trong `android/app/src/main/java/com/asiafbtv/`. Không sinh lại template hoặc chép đè mã nguồn.
 
 **Nếu thành công**, APK nằm tại:
 
@@ -97,7 +97,7 @@ Tắt USB/Wireless debugging sau khi hoàn tất. Đừng để cổng ADB mở 
 
 - **`node/npm/npx` not found**: cài Node.js, mở lại VS Code/Terminal.
 - **Android SDK missing**: cài SDK qua Android Studio và cấu hình `ANDROID_HOME`.
-- **Init template failed**: kiểm tra Internet và npm registry; không xóa code bạn đã sửa. Với folder `build-work/AsiaFBTV` hỏng, hãy đổi tên trước khi build lại.
+- **Cài thư viện thất bại**: kiểm tra Internet/npm registry, chạy lại `npm ci` tại `react-native/`. Không xóa code trong `src/` hoặc `android/`.
 - **Gradle failed**: đọc lỗi, cài đúng SDK/NDK Build Tools được báo thiếu. Cập nhật phụ thuộc có kiểm soát, tránh phối trộn React Native core với `react-native-tvos`.
 - **ADB unauthorized/offline**: kiểm tra hộp thoại cấp quyền trên TV, kết nối LAN/Wi-Fi.
 - **Nút HDMI không chuyển ngay**: không phải lỗi HTML; Android TV không cho ứng dụng thường tự do chuyển mọi nguồn HDMI.

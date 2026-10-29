@@ -1,144 +1,85 @@
-# Asia Food & Beverage TV — React Native TV (Android / Xiaomi)
+# ASIA F&B TV — React Native Android TV
 
-**Mục tiêu:** Bản Android TV native bằng `react-native-tvos`, dành cho Xiaomi TV A 65 2026 — L65MB-ASEA, thay thế bản WebView demo trước đó. Sử dụng giao diện React Native với phần nền ảnh thương hiệu đã duyệt, không render chồng logo/nút dưới dạng screenshot. Điều khiển qua màn hình cảm ứng **và** remote D-pad, OK, Back.
+Dự án React Native TV đầy đủ dành cho Xiaomi Google TV A 65 inch 2026, model L65MB-ASEA. Dùng React 19.2 và `react-native-tvos` 0.83.0-0 từ template TV chính thức. Không dùng React Native core song song.
 
-## 0. TRẠNG THÁI / BẢO MẬT
+Bản 1.2 dùng mẫu phong cảnh hồ nước lúc bình minh: nền sạch `assets/lake-sunrise.png`, hai khung nhỏ Ứng dụng/Kết nối có viền vàng sáng khi được chọn, đồng hồ và cài đặt phía trên, dải đối tác có vạch ngăn phía dưới. Thanh âm lượng dọc đã bỏ khỏi màn hình chính; dùng nút âm lượng của remote và cài đặt âm thanh của TV. YouTube/EShare/Play Store dùng icon của thiết kế, vẫn mở ứng dụng thật đã cài. Cài đè APK giữ danh sách ứng dụng ghim và chức năng Home.
 
-**Đây là mã nguồn có script BUILD APK chứ không phải file APK đã biên dịch.** Trong môi trường tạo gói, không có Android SDK, Gradle cache hay mạng để cài npm packages. Vì vậy chưa thể biên dịch hay xác nhận chạy trên firmware Xiaomi. Chỉ khi chạy script thành công trên Windows thì mới có `AsiaFB_TV_ReactNative_Test.apk`.
+Nền được tái tạo bằng công cụ image_gen từ ảnh mẫu, có thể khác nhẹ ảnh gốc; [prompt và nguồn ảnh](../design/lake-sunrise.prompt.txt). Ảnh nền cũ vẫn được giữ trong `assets/background.jpg`.
 
-- Cài đặt độc lập qua ADB. **Không tự thay Google TV Home**, không root, không xóa ứng dụng hay vô hiệu hóa system package.
-- Bản build `assembleRelease` nhúng JavaScript Hermes và asset vào APK, **sau khi cài không cần Metro, không cần máy tính chạy song song**.
-- Template đang dùng `@react-native-tvos/template-tv@0.83.0-0` để có phụ thuộc cùng thế hệ; đây là lựa chọn ổn định cho bản thử, không chạy `react-native` core và `react-native-tvos` cùng lúc.
-- Bản build release mặc định **ký bằng debug key từ template**, chỉ dùng cài thử nội bộ, không phát hành Play Store.
-- Không thay Home và không bật các quyền Android không cần thiết. Chỉ cấp `MODIFY_AUDIO_SETTINGS` (âm lượng) + internet của template. Có `<queries>` giới hạn cho Leanback/Launcher để liệt kê app đã cài.
+## Cấu trúc và nơi chỉnh sửa
 
-## 1. Các chức năng hiện được viết
-
-| Thành phần | Có trong React Native | Trên TV thật cần kiểm tra |
-|---|---|---|
-| Background ảnh Asia F&B | Có; 1 ảnh JPG riêng, không blur/lớp phủ toàn màn hình | Khung hình 16:9 |
-| Đồng hồ/Ngày tháng tự cập nhật | Có | Múi giờ và giờ TV |
-| Khung Apps nhỏ / mở rộng | Có; native Pressable, ScrollView | Phím lên/xuống/trái/phải/OK/Back |
-| YouTube / EShare / Play Store | Có; native module tìm và mở ứng dụng đã cài | Đúng package, EShare có trên máy không |
-| Danh sách Apps đã cài | Có; đọc ứng dụng Leanback/Launcher | Phiên bản Android và khả năng hiển thị package |
-| Ghim ứng dụng | Nhấn giữ OK vào app; SharedPreferences native | Kiểm tra lưu sau reboot |
-| HDMI / Miracast / Google Cast / USB | Có nút và thông báo hướng dẫn / cố gắng mở app tương ứng | HDMI chọn Input bằng remote; Google Cast do thiết bị gửi khởi động |
-| Thanh âm lượng dọc | Kéo bằng tay, OK chỉnh qua D-pad ↑↓, mute; AudioManager | Giới hạn âm thanh firmware |
-| Đổi đầu ra âm thanh | Có nút mở bảng cài đặt âm thanh Android | TV có cho phép đổi ra loa/Bluetooth không |
-| Footer logo đối tác | Native `Animated.loop` + `useNativeDriver`, logo nối nhau | Độ mượt trên RAM 2 GB |
-| Chạy không có Metro | Build `assembleRelease` | Test sau cài / restart |
-
-**Không cam kết:** Có thể chuyển HDMI trực tiếp không cần nút Input, TV làm thiết bị gửi Google Cast, app tự tải APK/Play Store, hoặc chuyển Bluetooth output bằng API thường. Các tác vụ này phụ thuộc firmware/quyền hệ thống. Các nút sẽ giải thích đúng tình trạng thay vì giả lập đã chuyển.
-
-## 2. Chuẩn bị Windows 11
-
-1. Cài **Node.js 22 LTS** (22.11 trở lên), mở PowerShell mới, chạy `node -v`, `npm -v`.
-2. Cài **Android Studio** từ <https://developer.android.com/studio>. Mở Android Studio → SDK Manager → cài SDK Platform mà template yêu cầu (nếu IDE báo thiếu, đồng ý cài), Build-Tools, Platform-Tools, Android SDK Command-line Tools; NDK/CMake nếu Gradle hỏi. Java/JDK dùng bản tích hợp Android Studio hoặc JDK 17 theo hướng dẫn RN TV template.
-3. Đặt `ANDROID_HOME` tới SDK, thường là `C:\Users\<tên Windows>\AppData\Local\Android\Sdk`. `build-windows.ps1` sẽ tự dò thư mục này nếu biến chưa có.
-4. Phải có Internet **trên PC trong lần build đầu**: npm sẽ tải React Native TV template; Gradle tải Android dependencies; các lần sau dùng cache.
-5. Giải nén ZIP ra đường dẫn ngắn không dấu, ví dụ `C:\AsiaFB_TV_ReactNative_TV` (nếu có thể). Tránh tên thư mục chứa ký tự đặc biệt.
-
-## 3. Build APK bằng 1 file .cmd
-
-**Chưa cần kết nối TV khi build.** Mở thư mục đã giải nén và chạy đúp `build-windows.cmd`. Hoặc mở PowerShell:
-
-```powershell
-cd C:\AsiaFB_TV_ReactNative_TV
-powershell -NoProfile -ExecutionPolicy Bypass -File .\build-windows.ps1
+```text
+react-native/
+├── android/                         # Dự án Android thật, mở được bằng Android Studio
+│   ├── app/src/main/
+│   │   ├── java/com/asiafbtv/        # MainActivity, MainApplication, AsiaTVModule, AsiaTVPackage
+│   │   ├── res/                     # Tên app, icon, banner TV
+│   │   └── AndroidManifest.xml      # Khai báo quyền và activity
+│   ├── app/build.gradle
+│   └── gradlew.bat
+├── src/
+│   ├── App.tsx                      # Màn hình chính, focus remote, đồng hồ, âm lượng
+│   └── components/AppLibrary.tsx    # Danh sách và quản lý ứng dụng
+├── assets/                          # Ảnh nền, icon, logo dùng trong APK
+├── preview/                         # Ảnh bố cục tham chiếu, không phải app đang chạy
+├── scripts/prepare-android.js       # Sửa tương thích Gradle plugin sau npm install
+├── App.tsx                          # Xuất màn hình từ src/App.tsx
+├── index.js                         # Đăng ký app với React Native
+├── app.json                         # Tên đăng ký AsiaFBTV
+├── package.json / package-lock.json # Thư viện và phiên bản đã khóa
+├── tsconfig.json                    # TypeScript và IntelliSense
+├── babel.config.js / metro.config.js
+├── build-windows.cmd / .ps1         # Build release APK trong dự án này
+└── install-tv.ps1 / uninstall-tv.ps1 / backup-tv-readonly.ps1
 ```
 
-Script thực hiện theo thứ tự:
+Sửa trực tiếp file trong `src/`, `assets/` và `android/`. Không còn bước sinh một dự án khác vào `build-work` hoặc `D:\AsiaFB-build`; build không chép đè code Android. Không có thư mục iOS vì ứng dụng này chỉ dành cho Android TV.
 
-1. Gọi Community CLI tạo `build-work\AsiaFBTV` từ phiên bản template TV cố định.
-2. Chép `App.tsx`, ảnh nền sạch, icon và logo đối tác vào dự án.
-3. Thêm mô-đun native `AsiaTVModule.java` và đăng ký trong `MainApplication.kt`; thêm launcher category dành cho Android TV, icon/TV banner và quyền âm thanh.
-4. Chạy `gradlew.bat --no-daemon --stacktrace assembleRelease`; bản **release đã nhúng JS, không cần Metro**.
-5. Chép APK ra `AsiaFB_TV_ReactNative_Test.apk` ngay bên cạnh `build-windows.cmd`.
+## Cài thư viện và kiểm tra code
 
-Nếu báo thiếu SDK/NDK/Build Tools hãy mở Android Studio SDK Manager cài đúng version mà log Gradle yêu cầu, rồi chạy lại. Không tự tải từ các nguồn không rõ ràng. Nếu script init thất bại, kiểm tra mạng/npm registry và xóa/đổi tên thư mục `build-work\AsiaFBTV` nếu là một dự án tạo hỏng, rồi thử lại. Script không tự xóa worktree để tránh mất dữ liệu.
-
-### Xác minh (sau khi build)
+Mở terminal tại `D:\TV\TV\react-native`:
 
 ```powershell
-Get-Item .\AsiaFB_TV_ReactNative_Test.apk
-# Nếu đã cài platform-tools và có aapt:
-# aapt dump badging .\AsiaFB_TV_ReactNative_Test.apk
+npm ci
+npm run typecheck
 ```
 
-Hãy giữ file ZIP source và APK để có thể cài lại hoặc gỡ.
+`npm ci` cài thư viện từ lockfile và tự chạy bước tương thích Gradle. `node_modules/` là thư viện được cài tự động, không sửa và không đưa lên Git. Nếu VS Code vẫn giữ lỗi cũ, chạy **TypeScript: Restart TS Server** trong Command Palette.
 
-## 4. Bật USB / Wireless Debugging Google TV — từng bước
+## Xem React Native thực tế
 
-1. Trên TV: **Cài đặt → Hệ thống → Giới thiệu → Android TV OS build**. Nhấn **OK 7 lần** để mở Developer Options (một số Xiaomi có thể nằm ở Model). Không thay bất kỳ cấu hình hệ thống nào khác.
-2. Quay lại Cài đặt → **Tùy chọn nhà phát triển → USB debugging / ADB debugging** bật tạm thời. Nếu có Network debugging / Wireless debugging, dùng khi cần kết nối từ PC.
-3. TV/PC cùng LAN/Wi-Fi, kiểm tra TV IP tại **Cài đặt → Mạng và Internet**.
-4. Windows: cài Platform-Tools từ <https://developer.android.com/tools/releases/platform-tools>, giải nén `C:\platform-tools`, mở PowerShell rồi chạy:
+Cần Node.js từ 22.11 trở lên, JDK 17, Android Studio, Android SDK/NDK theo `android/build.gradle`, và giả lập Android TV hoặc TV đã cho phép ADB.
 
 ```powershell
-cd C:\platform-tools
-.\adb.exe version
-.\adb.exe connect 192.168.1.50:5555  # IP ví dụ, thay IP TV thật
-.\adb.exe devices -l
+# Terminal 1: giữ Metro chạy khi dùng bản debug
+npm start
+
+# Terminal 2: build và mở trên thiết bị/giả lập đã kết nối
+npm run android
 ```
 
-5. Nếu xuất hiện “Allow USB debugging?” trên TV, chỉ xác nhận nếu chính bạn đang thao tác. Muốn ghép cặp bằng mã khi dùng **Wireless debugging**: đọc IP/port trên TV, sử dụng `adb pair IP:PAIR_PORT`, nhập mã trên TV, rồi `adb connect IP:CONNECT_PORT`. Hai port có thể khác nhau.
-6. Đảm bảo `adb devices -l` hiển thị trạng thái `device`. Trường hợp `unauthorized`/`offline` phải xử lý quyền và mạng trước, không thử các lệnh xóa package.
+`preview/AsiaFB_ReactNative_Layout_Current.png` là ảnh chụp giao diện 1.2 trên TV. File JPG `AsiaFB_ReactNative_Layout_Reference.jpg` là mẫu cũ được giữ để tham khảo. `../web/index.html` là bản HTML riêng, không chạy code React Native và không đồng bộ tự động khi sửa `src/`.
 
-**Lưu ý:** Một số firmware TV không hỗ trợ ADB TCP 5555; không ép kết nối bằng lệnh can thiệp hệ thống. Sau khi thử xong hãy tắt debugging và thu hồi quyền ADB nếu không cần.
+## Build APK chạy độc lập
 
-## 5. Sao lưu chỉ đọc trước khi cài thử
-
-**Chỉ chạy sau khi kết nối ADB thành công**, không thay đổi TV:
+Đặt `ANDROID_HOME` tới Android SDK, ví dụ `%LOCALAPPDATA%\Android\Sdk`, và `JAVA_HOME` tới JDK 17. Nhấp đôi `build-windows.cmd` hoặc chạy:
 
 ```powershell
-$env:Path += ';C:\platform-tools'
-cd C:\AsiaFB_TV_ReactNative_TV
-powershell -ExecutionPolicy Bypass -File .\backup-tv-readonly.ps1
+npm run build:windows
 ```
 
-Backup lưu `getprop`, packages, disabled packages, Home, audio, màn hình chụp. **Không phải firmware backup**. Không chia sẻ công khai vì có thể chứa dữ liệu thiết bị và mạng.
+Script kiểm tra TypeScript, chạy Gradle `assembleRelease` tại `android/`, rồi chép APK ra `AsiaFB_TV_ReactNative_Test.apk`. Bản release nhúng JavaScript và ảnh, không cần Metro hay máy tính chạy cùng. APK dùng debug key của template để thử nội bộ; chưa phải bản phát hành Play Store. Giữ đường dẫn dự án ngắn để tránh giới hạn đường dẫn CMake trên Windows.
 
-## 6. Cài APK và dùng remote
+## Cài, thử và gỡ trên TV
 
-```powershell
-$env:Path += ';C:\platform-tools'
-cd C:\AsiaFB_TV_ReactNative_TV
-powershell -ExecutionPolicy Bypass -File .\install-tv.ps1
-```
+Kết nối ADB theo [hướng dẫn](../docs/BUILD-APK-VA-ADB.md). Sau đó dùng `install-tv.ps1`, mở **ASIA F&B TV** trong danh sách Apps. Dùng phím mũi tên, OK và Back; nhấn giữ OK để ghim ứng dụng. Kiểm tra khả năng mở YouTube/EShare, âm lượng và các mục kết nối trên TV thật.
 
-Script hỏi `YES` trước khi cài. Mở TV → Apps → **ASIA F&B TV**. Thử:
+`backup-tv-readonly.ps1` lưu thông tin thiết bị để đối chiếu, không phải bản sao firmware. `uninstall-tv.ps1` gỡ app thử. Các script cài/gỡ vẫn yêu cầu xác nhận trước khi tác động lên thiết bị.
 
-- Remote ↑/↓/←/→ di chuyển focus (khung viền vàng). **OK** mở khung / chọn ứng dụng.
-- **Back** đóng khung đang mở; khi không còn khung mở, Back về hệ thống.
-- Âm lượng: chạm kéo dọc trực tiếp; chọn thanh bằng remote → OK vào chỉnh → ↑/↓ thay đổi 5% → OK hoàn tất, Back thoát chỉnh.
-- **Nhấn giữ OK** tại app trong danh sách mở rộng để ghim/bỏ ghim (khả năng phát sinh long press phụ thuộc remote).
-- Google Cast: dùng nút Cast từ điện thoại/máy tính. HDMI: dùng nút Input/Source của remote nếu firmware không cung cấp Intent.
-- Footer đối tác cuộn vô hạn bằng animation native driver.
+Từ bản 1.1, app khai báo HOME/DEFAULT để có thể được chọn làm launcher. Cài APK chưa tự đổi Home; cần đặt ứng dụng mặc định trên TV hoặc dùng ADB `cmd package set-home-activity --user 0 com.asiafbtv/.MainActivity`. Trên TV Xiaomi đang dùng, firmware vẫn ưu tiên Home của Google sau khi đặt mặc định và không cho tắt riêng component Home. Có thể tạm tắt gói `com.google.android.apps.tv.launcherx` bằng `pm disable-user --user 0`; gói vẫn được giữ lại, không gỡ cài đặt. Muốn quay lại, chạy `restore-google-home.ps1` (tham số `-Serial` nếu IP đổi); script bật lại gói trước khi khôi phục mặc định. Khôi phục Google Home trước khi gỡ ASIA F&B TV.
 
-Kiểm thử thêm: khởi động lại TV và chạy app xem cần Metro hay không (bản release không cần), YouTube/Play Store/EShare có mở không, HDMI và hệ thống vẫn bình thường, Wi-Fi/âm lượng/remote hoạt động.
+Khả năng chọn HDMI, mở Miracast, đổi đầu ra âm thanh phụ thuộc firmware. Google Cast do điện thoại/máy tính gửi nội dung khởi động. Các tính năng cần được kiểm thử riêng trên TV thật.
 
-## 7. Gỡ bản thử / hoàn nguyên
+TV Xiaomi này còn có Home dự phòng `com.google.android.tungsten.setupwraith` với độ ưu tiên cao hơn app thường. Để nút Home về ASIA F&B TV, gói này cũng được tạm tắt cùng `launcherx`. Script khôi phục bật lại cả hai gói; các ứng dụng Google khác không bị thay đổi.
 
-TV → Cài đặt → Ứng dụng → ASIA F&B TV → Gỡ cài đặt; hoặc chạy:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File .\uninstall-tv.ps1
-```
-
-**Không cần restore system package** vì bản thử không thay Home, không gỡ/tắt bất kỳ package nào. Tắt USB/Wireless debugging khi kết thúc.
-
-## 8. Giải thích vì sao chọn React Native TV
-
-- `react-native-tvos` (không phải React Native core) có D-pad focus và sự kiện OK/back dành riêng cho Android TV; native `Pressable` phản hồi focus, có ring rõ.
-- Component gốc render bằng React Native + Hermes; footer Animated dùng `useNativeDriver`, ít thao tác JS hơn HTML/CSS/WebView.
-- Một ảnh nền JPEG 740 KB, các icon nhỏ PNG; không chạy WebView song song.
-- **Không bảo đảm tự động nhanh hơn** tất cả launcher native Kotlin/Java. Cần đo trên TV thật (RAM 2GB, lưu trữ 8GB), nhất là thời gian mở app, RAM và nhiệt. Còn có thể tối ưu theo thông số thực tế.
-
-## 9. Tài liệu tham khảo chính thức
-
-- TV fork: https://github.com/react-native-tvos/react-native-tvos
-- TV template: https://github.com/react-native-tvos/template-tv
-- Android: https://developer.android.com/studio
-- ADB: https://developer.android.com/tools/adb
-
-**Quan trọng:** Dự án React Native này là một ứng dụng cài thêm; không tự động thực hiện bước debloat hoặc thay launcher mặc định của CleanYourTV. Chúng ta phải kiểm tra và sao lưu riêng rồi mới bàn đến thay Home.
+Nguồn template: `@react-native-tvos/template-tv@0.83.0-0`; giấy phép kèm tại `LICENSE.template`.

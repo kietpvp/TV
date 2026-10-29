@@ -3,6 +3,7 @@
   "tasks": [
     {"label":"ASIA F&B: Preview Web (localhost:4173)","type":"shell","command":"npm run preview","isBackground":true,"problemMatcher":[],"presentation":{"reveal":"always","panel":"dedicated"}},
     {"label":"ASIA F&B: Check Files","type":"shell","command":"npm run check","problemMatcher":[],"presentation":{"reveal":"always","panel":"dedicated"}},
+    {"label":"ASIA F&B: Check React Native TypeScript","type":"shell","command":"npm --prefix react-native run typecheck","problemMatcher":"$tsc","presentation":{"reveal":"always","panel":"dedicated"}},
     {"label":"ASIA F&B: Build Android APK (Windows)","type":"shell","command":"powershell -NoProfile -ExecutionPolicy Bypass -File react-native/build-windows.ps1","problemMatcher":[],"presentation":{"reveal":"always","panel":"dedicated"}}
   ]
 }

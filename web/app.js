@@ -1,7 +1,7 @@
 /**
  * Asia F&B TV — HTML design playground.
  * Tất cả các nút trong BẢN WEB chỉ mô phỏng, không điều khiển Android.
- * Bản React Native thật nằm tại ../react-native/App.tsx.
+ * Bản React Native thật nằm tại ../react-native/src/App.tsx.
  */
 'use strict';
 const STAGE_WIDTH = 1672;
@@ -34,7 +34,7 @@ const connections = [
   {id:'cast', title:'Google Cast', note:'Nhận hình từ điện thoại / PC'},
   {id:'usb', title:'USB', note:'Mở nội dung trên USB'},
 ];
-const partnerNames = ['fish','wana','solavie','mcoffee','wazzer','zizipop'];
+const partnerNames = ['zizipop','fish','wana','solavie','mcoffee','wazzer'];
 
 function sizeStage(){
   const k = Math.min(innerWidth / STAGE_WIDTH, innerHeight / STAGE_HEIGHT);
